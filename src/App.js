@@ -9,6 +9,7 @@ import AddTweet from './Home/AddTweet';
 import ShowTweet from './Home/ShowTweet';
 import DeleteTweet from './Home/DeleteTweet';
 import UpdateTweet from './Home/UpdateTweet';
+import ShowAllTweet from './Home/ShowAllTweet';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <Route path='/tweet/show' element={<ShowTweet/>}/>
       <Route path='/tweet/delete' element={<DeleteTweet/>}/>
       <Route path='/tweet/update' element={<UpdateTweet/>}/>
+      <Route path='/tweet' element ={<ShowAllTweet/>}/>
     </Routes>
     </BrowserRouter>
   );

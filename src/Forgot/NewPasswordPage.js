@@ -48,8 +48,8 @@ export default function NewPasswordPage() {
           email: email,
           password: password,
         };
+         // eslint-disable-next-line
         const res=await axios.post(`${api}/users/new-password`, data);
-        console.log(res)
         setEmail('');
         setPassword('');
         navigate('/Login');

@@ -30,8 +30,8 @@ export default function ForgotPasswordPage() {
          
           email: email,
         };
+         // eslint-disable-next-line
         const res=await axios.post(`${api}/users/forgot-password`, data);
-        console.log(res)
       
         setEmail('');
         

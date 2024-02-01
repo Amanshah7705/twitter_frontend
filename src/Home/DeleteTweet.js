@@ -12,6 +12,7 @@ export default function DeleteTweet() {
   const api = process.env.REACT_APP_BACKEND_URL;
 
   async function ForFetchPercularTweet() {
+     // eslint-disable-next-line
     const data = await axios.post(
       `${api}/tweet/delete`,
       { id_for_delete: id },
@@ -22,7 +23,6 @@ export default function DeleteTweet() {
         },
       }
     );
-    console.log(data);
     navigate('/tweet/show');
   }
 

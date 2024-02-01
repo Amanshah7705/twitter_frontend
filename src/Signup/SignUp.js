@@ -54,7 +54,6 @@ export default function SignUp(){
 
   const validator = async () => {
     try {
-        console.log(username,email,password)
       validateUser();
       validateEmail();
       validatePassword();
@@ -65,6 +64,7 @@ export default function SignUp(){
           email: email,
           password: password,
         };
+         // eslint-disable-next-line
         const res=await axios.post(`${api}/users/signup`, data);
         setUsername('');
         setEmail('');

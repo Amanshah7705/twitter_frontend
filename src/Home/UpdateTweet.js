@@ -32,6 +32,7 @@ export default function UpdateTweet() {
   }, []);
 
   async function major() {
+     // eslint-disable-next-line
     const data = await axios.post(
       `${api}/tweet/update`,
       { id_for_update: id, tweetabout: MyTweet },
@@ -42,7 +43,6 @@ export default function UpdateTweet() {
         },
       }
     );
-    console.log(data);
     navigate('/tweet/show');
   }
 

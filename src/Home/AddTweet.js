@@ -17,13 +17,13 @@ export default function AddTweet() {
         tweetabout: TweetAbout,
       };
       try {
+         // eslint-disable-next-line
         const response = await axios.post(`${api}/tweet/add`, data, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'application/json', // Use 'application/json' for JSON data
           },
         });
-        console.log(response);
         navigate('/')
       } catch (error) {
         console.error('Error posting tweet:', error);

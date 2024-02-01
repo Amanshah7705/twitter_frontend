@@ -34,14 +34,13 @@ export default function Profile() {
       data.append('bio', Bio);
       data.append('location', Location);
       try {
-        // console.log(accessToken);
+         // eslint-disable-next-line
         const res = await axios.post(`${api}/users/update-profile`, data, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'multipart/form-data', // Set content type for FormData
           },
         });
-        console.log(res);
         navigate('/');
       } catch (error) {
         console.error('Error updating profile:', error);
