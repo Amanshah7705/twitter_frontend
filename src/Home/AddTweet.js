@@ -1,40 +1,40 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
-import './AddTweet.css'
+import React, { useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import "./AddTweet.css";
 export default function AddTweet() {
   const api = process.env.REACT_APP_BACKEND_URL;
-  const accessToken = Cookies.get('accessToken');
-  const navigate = useNavigate()
-  const [TweetAbout, setTweetAbout] = useState('');
+  const accessToken = Cookies.get("accessToken");
+  const navigate = useNavigate();
+  const [TweetAbout, setTweetAbout] = useState("");
   const [TweetAboutError, setTweetAboutError] = useState(null);
 
   async function validator() {
     if (!TweetAbout) {
-      setTweetAboutError('Field should not be empty');
+      setTweetAboutError("Field should not be empty");
     } else {
       const data = {
         tweetabout: TweetAbout,
       };
       try {
-         // eslint-disable-next-line
+        // eslint-disable-next-line
         const response = await axios.post(`${api}/tweet/add`, data, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json', // Use 'application/json' for JSON data
+            "Content-Type": "application/json", // Use 'application/json' for JSON data
           },
         });
-        navigate('/')
+        navigate("/");
       } catch (error) {
-        console.error('Error posting tweet:', error);
+        console.error("Error posting tweet:", error);
         // Handle error as needed
       }
     }
   }
-   function backer(){
-    navigate('/')
-   }
+  function backer() {
+    navigate("/");
+  }
   return (
     <div className="container mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
       <button className="mb-4" onClick={backer}>
@@ -47,7 +47,9 @@ export default function AddTweet() {
           placeholder="Enter your tweet"
           onChange={(e) => setTweetAbout(e.target.value)}
         ></textarea>
-        {TweetAboutError !== null && <p className="text-red-500">{TweetAboutError}</p>}
+        {TweetAboutError !== null && (
+          <p className="text-red-500">{TweetAboutError}</p>
+        )}
       </div>
       <div>
         <button
@@ -59,6 +61,5 @@ export default function AddTweet() {
         </button>
       </div>
     </div>
-
-    );
+  );
 }

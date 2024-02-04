@@ -1,54 +1,55 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function SignUp(){
-  const api = process.env.REACT_APP_BACKEND_URL
+export default function SignUp() {
+  const api = process.env.REACT_APP_BACKEND_URL;
   const navigate = useNavigate();
   const userRegex = /^[a-zA-Z0-9_]{4,20}$/;
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [userError, setUserError] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userError, setUserError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const validateUser = () => {
     try {
       if (userRegex.test(username)) {
-        setUserError('');
+        setUserError("");
       } else {
-        setUserError('Invalid username');
+        setUserError("Invalid username");
       }
     } catch (error) {
-      setUserError('Invalid username');
+      setUserError("Invalid username");
     }
   };
 
   const validateEmail = () => {
     try {
       if (emailRegex.test(email)) {
-        setEmailError('');
+        setEmailError("");
       } else {
-        setEmailError('Invalid email');
+        setEmailError("Invalid email");
       }
     } catch (error) {
-      setEmailError('Invalid email');
+      setEmailError("Invalid email");
     }
   };
 
   const validatePassword = () => {
     try {
       if (passwordRegex.test(password)) {
-        setPasswordError('');
+        setPasswordError("");
       } else {
-        setPasswordError('Invalid password');
+        setPasswordError("Invalid password");
       }
     } catch (error) {
-      setPasswordError('Invalid password');
+      setPasswordError("Invalid password");
     }
   };
 
@@ -64,12 +65,12 @@ export default function SignUp(){
           email: email,
           password: password,
         };
-         // eslint-disable-next-line
-        const res=await axios.post(`${api}/users/signup`, data);
-        setUsername('');
-        setEmail('');
-        setPassword('');
-        navigate('/Login');
+        // eslint-disable-next-line
+        const res = await axios.post(`${api}/users/signup`, data);
+        setUsername("");
+        setEmail("");
+        setPassword("");
+        navigate("/Login");
       }
     } catch (error) {
       console.error(error);
@@ -77,7 +78,7 @@ export default function SignUp(){
   };
 
   const logInRedirect = () => {
-    navigate('/Login');
+    navigate("/Login");
   };
 
   return (
@@ -137,5 +138,4 @@ export default function SignUp(){
       </div>
     </div>
   );
-};
-
+}

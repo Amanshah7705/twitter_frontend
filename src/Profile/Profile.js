@@ -1,50 +1,50 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function Profile() {
   const api = process.env.REACT_APP_BACKEND_URL;
   const accessToken = Cookies.get("accessToken");
   const navigate = useNavigate();
-  const [Bio, setBio] = useState('');
-  const [Location, setLocation] = useState('');
+  const [Bio, setBio] = useState("");
+  const [Location, setLocation] = useState("");
   const [CoverImage, setCoverImage] = useState(null); // Changed to null
-  const [BioError, setBioError] = useState('');
-  const [LocationError, setLocationError] = useState('');
-  const [CoverImageError, setCoverImageError] = useState('');
+  const [BioError, setBioError] = useState("");
+  const [LocationError, setLocationError] = useState("");
+  const [CoverImageError, setCoverImageError] = useState("");
   const [ans, setAns] = useState(false);
 
   async function validator() {
     if (!Bio || !Location || !CoverImage) {
       if (!Bio) {
-        setBioError('Error Occur at Bio Part');
+        setBioError("Error Occur at Bio Part");
       }
       if (!Location) {
-        setLocationError('Error Occur at Location Part');
+        setLocationError("Error Occur at Location Part");
       }
       if (!CoverImage) {
-        setCoverImageError('Error Occur at Cover Image Part');
+        setCoverImageError("Error Occur at Cover Image Part");
       }
       setAns(true);
     } else {
       setAns(false);
       const data = new FormData(); // Use FormData for file uploads
-      data.append('profile_picture', CoverImage);
-      data.append('bio', Bio);
-      data.append('location', Location);
+      data.append("profile_picture", CoverImage);
+      data.append("bio", Bio);
+      data.append("location", Location);
       try {
-         // eslint-disable-next-line
+        // eslint-disable-next-line
         const res = await axios.post(`${api}/users/update-profile`, data, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'multipart/form-data', // Set content type for FormData
+            "Content-Type": "multipart/form-data", // Set content type for FormData
           },
         });
-        navigate('/');
+        navigate("/");
       } catch (error) {
-        console.error('Error updating profile:', error);
-        navigate('/')
+        console.error("Error updating profile:", error);
+        navigate("/");
         // Handle error as needed
       }
     }

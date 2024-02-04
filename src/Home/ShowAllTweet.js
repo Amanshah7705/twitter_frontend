@@ -24,9 +24,9 @@ export default function ShowAllTweet() {
   const [TextForSend, SetTextForSend] = useState();
   const [CheckForAddComment, SetCheckForAddComment] = useState({});
   const [CheckForshowComment, SetCheckForshowComment] = useState({});
-  const [showc,setshowc] = useState(false)
-  const [allusername,SetAllUsername] = useState()
-  // eslint-disable-next-line 
+  const [showc, setshowc] = useState(false);
+  const [allusername, SetAllUsername] = useState();
+  // eslint-disable-next-line
   const [AllCommentDeatils, SetAllCommentDeatils] = useState();
   async function fetchTweetDetails() {
     try {
@@ -51,20 +51,22 @@ export default function ShowAllTweet() {
       console.error("Error fetching tweets:", error);
     }
   }
-  async function FetchUsername(){
-      const data = await axios.post( `${api}/users/allid`,
+  async function FetchUsername() {
+    const data = await axios.post(
+      `${api}/users/allid`,
       {},
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
-      })
-      SetAllUsername(data.data.data)
+      }
+    );
+    SetAllUsername(data.data.data);
   }
   useEffect(() => {
     fetchTweetDetails();
-    FetchUsername()
+    FetchUsername();
     // eslint-disable-next-line
   }, []);
 
@@ -143,7 +145,7 @@ export default function ShowAllTweet() {
   }
   async function ShowComment(id) {
     // eslint-disable-next-line
-    setshowc((prev)=>(!prev))
+    setshowc((prev) => !prev);
     // SetCheckForshowComment((prev) => ({
     //   ...prev,
     //   [id]: !CheckForshowComment[id],
@@ -163,21 +165,21 @@ export default function ShowAllTweet() {
     );
     SetAllCommentDeatils(responce.data.data);
   }
-  async function mdr(id){
+  async function mdr(id) {
     SetCheckForshowComment((prev) => ({
       ...prev,
       [id]: !CheckForshowComment[id],
     }));
   }
 
-  async function addundercomment(id1,id2){
-      // eslint-disable-next-line
+  async function addundercomment(id1, id2) {
+    // eslint-disable-next-line
     const responce = await axios.post(
       `${api}/comments/add`,
       {
         textabout: TextForSend,
         underwhichtweet: id2,
-        underwhichcomment:id1
+        underwhichcomment: id1,
       },
       {
         headers: {
@@ -193,7 +195,7 @@ export default function ShowAllTweet() {
   }
   const ShowCommentComponent = (props) => {
     const data = props.datafor;
-    const mainid = props.idfor
+    const mainid = props.idfor;
     return (
       <div className="p-4">
         {data &&
@@ -202,25 +204,46 @@ export default function ShowAllTweet() {
               <div className="font-bold">{allusername[comment._id]}</div>
               <div className="mb-2">{comment.textcomment}</div>
               <div>
-              <Button onClick={() => SetCheckForAddComment((prev) => ({ ...prev, [comment._id]: !CheckForAddComment[comment._id] }))}>
-                Add comment to replay
-              </Button>
-              {CheckForAddComment[comment._id] === true && (
-                <div className="mt-2">
-                  <Input type='text' placeholder="add replay" onChange={(e) => SetTextForSend(e.target.value)} />
-                  <Button type='submit' colorScheme="teal" mt="2" onClick={() => addundercomment(comment._id, mainid)}>add comment to replay</Button>
-                </div>
-              )}
-            </div>
+                <Button
+                  onClick={() =>
+                    SetCheckForAddComment((prev) => ({
+                      ...prev,
+                      [comment._id]: !CheckForAddComment[comment._id],
+                    }))
+                  }
+                >
+                  Add comment to replay
+                </Button>
+                {CheckForAddComment[comment._id] === true && (
+                  <div className="mt-2">
+                    <Input
+                      type="text"
+                      placeholder="add replay"
+                      onChange={(e) => SetTextForSend(e.target.value)}
+                    />
+                    <Button
+                      type="submit"
+                      colorScheme="teal"
+                      mt="2"
+                      onClick={() => addundercomment(comment._id, mainid)}
+                    >
+                      add comment to replay
+                    </Button>
+                  </div>
+                )}
+              </div>
 
               <div className="mt-4">
                 <Button onClick={() => mdr(comment._id)}>
-                  {CheckForshowComment[comment._id] === true 
-                    ? 'Hide Comment'
-                    : 'Show Comment'}
+                  {CheckForshowComment[comment._id] === true
+                    ? "Hide Comment"
+                    : "Show Comment"}
                 </Button>
                 {CheckForshowComment[comment._id] === true && comment.reply && (
-                  <ShowCommentComponent datafor={comment.reply} idfor={mainid} />
+                  <ShowCommentComponent
+                    datafor={comment.reply}
+                    idfor={mainid}
+                  />
                 )}
               </div>
             </div>
@@ -228,12 +251,10 @@ export default function ShowAllTweet() {
       </div>
     );
   };
-  
-  
-  
+
   return (
     <div className="container mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
-      <Button onClick={()=>backer()} >Back</Button>
+      <Button onClick={() => backer()}>Back</Button>
       <div className="text-2xl font-bold mb-4">All Tweets</div>
       {myTweets.length ? (
         <List spacing={4}>
@@ -267,7 +288,9 @@ export default function ShowAllTweet() {
                     colorScheme="blue"
                     variant="link"
                   >
-                    {LikedUser[tweet._id] ? "Hide Users" : "Show Users who Liked"}
+                    {LikedUser[tweet._id]
+                      ? "Hide Users"
+                      : "Show Users who Liked"}
                   </Button>
                 </div>
                 {LikedUser[tweet._id] && (
@@ -344,6 +367,5 @@ export default function ShowAllTweet() {
         <p className="text-gray-500">No tweets to display.</p>
       )}
     </div>
-
   );
 }

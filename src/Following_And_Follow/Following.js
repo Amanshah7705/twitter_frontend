@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import { SelectFollowingList } from '../redux/listSlice';
-import './Following.css'
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { SelectFollowingList } from "../redux/listSlice";
+import "./Following.css";
 export default function Following() {
   const api = process.env.REACT_APP_BACKEND_URL;
-  const accessToken = Cookies.get('accessToken');
+  const accessToken = Cookies.get("accessToken");
   const navigate = useNavigate();
 
   const [DataForDisplay, SetDataForDisplay] = useState();
@@ -23,13 +23,13 @@ export default function Following() {
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
       SetDataForDisplay(response.data.data);
     } catch (error) {
-      console.error('Error fetching details:', error);
+      console.error("Error fetching details:", error);
     }
   }
 
@@ -41,9 +41,14 @@ export default function Following() {
     ForFetchDetails();
     // eslint-disable-next-line
   }, []);
-
+  function backer() {
+    navigate("/");
+  }
   return (
     <div className="container mx-auto my-4">
+      <div>
+        <button onClick={backer}>Back</button>
+      </div>
       <div className="bg-gray-100 p-6 rounded-lg shadow-md">
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {DataForDisplay?.map((user) => (

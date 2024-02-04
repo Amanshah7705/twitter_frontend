@@ -1,40 +1,41 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const api = process.env.REACT_APP_BACKEND_URL
+  const api = process.env.REACT_APP_BACKEND_URL;
   const navigate = useNavigate();
 
   const userRegex = /^[a-zA-Z0-9_]{4,20}$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [userError, setUserError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [userError, setUserError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const validateUser = () => {
     try {
       if (userRegex.test(username)) {
-        setUserError('');
+        setUserError("");
       } else {
-        setUserError('Invalid username');
+        setUserError("Invalid username");
       }
     } catch (error) {
-      setUserError('Invalid username');
+      setUserError("Invalid username");
     }
   };
 
   const validatePassword = () => {
     try {
       if (passwordRegex.test(password)) {
-        setPasswordError('');
+        setPasswordError("");
       } else {
-        setPasswordError('Invalid password');
+        setPasswordError("Invalid password");
       }
     } catch (error) {
-      setPasswordError('Invalid password');
+      setPasswordError("Invalid password");
     }
   };
 
@@ -48,16 +49,16 @@ export default function Login() {
           username: username,
           password: password,
         };
-         
-        const responce=await axios.post(`${api}/users/login`, data);
-        const {accessToken,refreshToken} = responce.data.data
-        
+
+        const responce = await axios.post(`${api}/users/login`, data);
+        const { accessToken, refreshToken } = responce.data.data;
+
         document.cookie = `accessToken=${accessToken}; path=/;`;
         document.cookie = `refreshToken=${refreshToken}; path=/;`;
 
-        setUsername('');
-        setPassword('');
-        navigate('/'); 
+        setUsername("");
+        setPassword("");
+        navigate("/");
       }
     } catch (error) {
       console.error(error);
@@ -65,11 +66,11 @@ export default function Login() {
   };
 
   const goToSignup = () => {
-    navigate('/Signup');
+    navigate("/Signup");
   };
 
   const goToForgotPassword = () => {
-    navigate('/ForgotPassword');
+    navigate("/ForgotPassword");
   };
 
   return (
@@ -107,7 +108,7 @@ export default function Login() {
           >
             Login
           </button>
-          
+
           <button
             onClick={goToSignup}
             className="text-blue-500 cursor-pointer underline mt-2 block"
@@ -125,5 +126,4 @@ export default function Login() {
       </div>
     </div>
   );
-};
-
+}

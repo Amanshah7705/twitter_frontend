@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Cookies from "js-cookie";
+import axios from "axios";
 import {
   Container,
   Grid,
@@ -10,17 +10,30 @@ import {
   Typography,
   CircularProgress,
   Button,
-} from '@mui/material';
-import { Image } from '@chakra-ui/react';
-import {  useDispatch } from 'react-redux';
-import { setFollowid } from '../redux/listSlice.js';
-import { setFollowingid } from '../redux/listSlice.js';
+  createTheme, // Import createTheme from @mui/material/styles
+  ThemeProvider, // Import ThemeProvider from @mui/material/styles
+} from "@mui/material";
+import { Image } from "@chakra-ui/react";
+import { useDispatch } from "react-redux";
+import { setFollowid } from "../redux/listSlice.js";
+import { setFollowingid } from "../redux/listSlice.js";
+
+// Create a theme using createTheme
+const theme = createTheme({
+  spacing: 4,
+  palette: {
+    primary: {
+      main: "#007bff",
+    },
+  },
+});
+
 export default function ProfileSeen() {
   const api = process.env.REACT_APP_BACKEND_URL;
-  const accessToken = Cookies.get('accessToken');
+  const accessToken = Cookies.get("accessToken");
   const navigate = useNavigate();
   const { userId } = useParams();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [DataForDisplay, SetDataForDisplay] = useState([]);
   const [loading, setLoading] = useState(true);
   const [StateChange, SetStateChange] = useState(0);
@@ -33,14 +46,14 @@ export default function ProfileSeen() {
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
       SetDataForDisplay(response.data.data);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching details:', error);
+      console.error("Error fetching details:", error);
       // Handle error as needed
     }
   }
@@ -51,7 +64,7 @@ export default function ProfileSeen() {
   }, [StateChange]);
 
   function handleBack() {
-    navigate('/');
+    navigate("/");
   }
 
   async function changeFollow(id) {
@@ -62,7 +75,7 @@ export default function ProfileSeen() {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
@@ -77,29 +90,35 @@ export default function ProfileSeen() {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
     SetStateChange((prev) => prev + 1);
   }
- async function handleFollow(){
-      dispatch(setFollowid(DataForDisplay[0].TotalFollowPart[0].follow))
-      navigate(`/follow/${userId}`)
- }
- async function handleFollowing(){
-      dispatch(setFollowingid(DataForDisplay[0].TotalFollowingPart[0].followers))
-      navigate(`/following/${userId}`)
- }
+
+  async function handleFollow() {
+    const followCount = DataForDisplay[0]?.TotalFollowPart[0]?.follow || 0;
+    dispatch(setFollowid(followCount));
+    navigate(`/follow/${userId}`);
+  }
+
+  async function handleFollowing() {
+    const followersCount =
+      DataForDisplay[0]?.TotalFollowingPart[0]?.followers || 0;
+    dispatch(setFollowingid(followersCount));
+    navigate(`/following/${userId}`);
+  }
+
   return (
-    <Container maxWidth="md" className="mt-4">
-      <Button className="mb-4" onClick={handleBack}>
-        Back
-      </Button>
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        DataForDisplay && (
+    <ThemeProvider theme={theme}>
+      <Container maxWidth="md" className="mt-4">
+        <Button className="mb-4" onClick={handleBack}>
+          Back
+        </Button>
+        {loading ? (
+          <CircularProgress />
+        ) : DataForDisplay && DataForDisplay.length > 0 ? (
           <Grid container spacing={3}>
             {DataForDisplay.map((userData) => (
               <Grid item key={userData._id} xs={12} md={6} lg={4}>
@@ -111,10 +130,10 @@ export default function ProfileSeen() {
                     <Typography variant="subtitle1" className="font-bold">
                       {userData.username}
                     </Typography>
-                    <Button className="mt-2" onClick={handleFollow} >
+                    <Button className="mt-2" onClick={handleFollow}>
                       Follow: {userData.TotalFollow}
                     </Button>
-                    <Button className="mt-2" onClick={handleFollowing} >
+                    <Button className="mt-2" onClick={handleFollowing}>
                       Following: {userData.TotalFollowing}
                     </Button>
                     <Typography variant="h6" gutterBottom>
@@ -161,8 +180,10 @@ export default function ProfileSeen() {
               </Grid>
             ))}
           </Grid>
-        )
-      )}
-    </Container>
+        ) : (
+          <Typography variant="h6">No data available</Typography>
+        )}
+      </Container>
+    </ThemeProvider>
   );
 }

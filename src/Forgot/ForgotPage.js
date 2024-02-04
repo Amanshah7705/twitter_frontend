@@ -1,40 +1,37 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 export default function ForgotPasswordPage() {
-  const api = process.env.REACT_APP_BACKEND_URL
+  const api = process.env.REACT_APP_BACKEND_URL;
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   const validateEmail = () => {
     try {
       if (emailRegex.test(email)) {
-        setEmailError('');
+        setEmailError("");
       } else {
-        setEmailError('Invalid email');
+        setEmailError("Invalid email");
       }
     } catch (error) {
-      setEmailError('Invalid email');
+      setEmailError("Invalid email");
     }
   };
-
 
   const validator = async () => {
     try {
       validateEmail();
 
-      if (!emailError ) {
+      if (!emailError) {
         const data = {
-         
           email: email,
         };
-         // eslint-disable-next-line
-        const res=await axios.post(`${api}/users/forgot-password`, data);
-      
-        setEmail('');
-        
+        // eslint-disable-next-line
+        const res = await axios.post(`${api}/users/forgot-password`, data);
+
+        setEmail("");
       }
     } catch (error) {
       console.error(error);
@@ -44,7 +41,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md md:w-96 w-full">
-        <h2 className="text-2xl font-bold mb-4">ForgotPassword  Page</h2>
+        <h2 className="text-2xl font-bold mb-4">ForgotPassword Page</h2>
 
         <div className="mb-4">
           <input
@@ -65,9 +62,7 @@ export default function ForgotPasswordPage() {
             Submit
           </button>
         </div>
-
       </div>
     </div>
   );
-};
-
+}

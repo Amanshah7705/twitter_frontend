@@ -1,25 +1,25 @@
 // userSlice.js
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const FollowAndFollowingSlice = createSlice({
-  name: 'FollowAndFollowing',
+  name: "FollowAndFollowing",
   initialState: {
-    Follow:[],
-    Following:[]
+    Follow: [],
+    Following: [],
   },
   reducers: {
     setFollowid: (state, action) => {
       state.Follow = action.payload;
     },
     setFollowingid: (state, action) => {
-        state.Following = action.payload
-      }
-    
+      state.Following = action.payload;
+    },
   },
 });
 
-export const { setFollowid,setFollowingid } = FollowAndFollowingSlice.actions;
+export const { setFollowid, setFollowingid } = FollowAndFollowingSlice.actions;
 
 export const selectFollowlist = (state) => state.FollowAndFollowing.Follow;
-export const SelectFollowingList = (state) => state.FollowAndFollowing.Following
+export const SelectFollowingList = (state) =>
+  state.FollowAndFollowing.Following;
 export default FollowAndFollowingSlice.reducer;
