@@ -42,7 +42,6 @@ export default function SearchBar() {
   }
 
   function handleInputChange(event) {
-    console.log(event.target.value)
     const inputValue = event.target.value;
     setSearchResults(
       StartData.filter(user => user.username.startsWith(inputValue))

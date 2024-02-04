@@ -1,0 +1,49 @@
+.container {
+    max-width: 600px;
+  }
+  
+  .bg-white {
+    background-color: #ffffff;
+  }
+  
+  .p-6 {
+    padding: 1.5rem;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+  
+  .button {
+    padding: 0.75rem 1.5rem;
+    margin-right: 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+  }
+  
+  .button-primary {
+    background-color: #007bff;
+    color: #ffffff;
+  }
+  
+  .button-secondary {
+    background-color: #6c757d;
+    color: #ffffff;
+  }
+  
+  .button-success {
+    background-color: #28a745;
+    color: #ffffff;
+  }
+  
+  .button-warning {
+    background-color: #ffc107;
+    color: #212529;
+  }
+  
+  .button-info {
+    background-color: #17a2b8;
+    color: #ffffff;
+  }
+  
+  

@@ -12,12 +12,15 @@ import {
   Button,
 } from '@mui/material';
 import { Image } from '@chakra-ui/react';
-
+import {  useDispatch } from 'react-redux';
+import { setFollowid } from '../redux/listSlice.js';
+import { setFollowingid } from '../redux/listSlice.js';
 export default function ProfileSeen() {
   const api = process.env.REACT_APP_BACKEND_URL;
   const accessToken = Cookies.get('accessToken');
   const navigate = useNavigate();
   const { userId } = useParams();
+  const dispatch = useDispatch()
   const [DataForDisplay, SetDataForDisplay] = useState([]);
   const [loading, setLoading] = useState(true);
   const [StateChange, SetStateChange] = useState(0);
@@ -34,7 +37,6 @@ export default function ProfileSeen() {
           },
         }
       );
-      console.log(response.data.data);
       SetDataForDisplay(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -53,6 +55,7 @@ export default function ProfileSeen() {
   }
 
   async function changeFollow(id) {
+    // eslint-disable-next-line
     const data = await axios.post(
       `${api}/users/FollowTo`,
       { followto: id },
@@ -63,11 +66,11 @@ export default function ProfileSeen() {
         },
       }
     );
-    console.log(data);
     SetStateChange((prev) => prev + 1);
   }
 
   async function changeUnfollow(id) {
+    // eslint-disable-next-line
     const data = await axios.post(
       `${api}/users/UnFollowTo`,
       { unfollow: id },
@@ -78,10 +81,16 @@ export default function ProfileSeen() {
         },
       }
     );
-    console.log(data);
     SetStateChange((prev) => prev + 1);
   }
-
+ async function handleFollow(){
+      dispatch(setFollowid(DataForDisplay[0].TotalFollowPart[0].follow))
+      navigate(`/follow/${userId}`)
+ }
+ async function handleFollowing(){
+      dispatch(setFollowingid(DataForDisplay[0].TotalFollowingPart[0].followers))
+      navigate(`/following/${userId}`)
+ }
   return (
     <Container maxWidth="md" className="mt-4">
       <Button className="mb-4" onClick={handleBack}>
@@ -102,10 +111,10 @@ export default function ProfileSeen() {
                     <Typography variant="subtitle1" className="font-bold">
                       {userData.username}
                     </Typography>
-                    <Button className="mt-2">
+                    <Button className="mt-2" onClick={handleFollow} >
                       Follow: {userData.TotalFollow}
                     </Button>
-                    <Button className="mt-2">
+                    <Button className="mt-2" onClick={handleFollowing} >
                       Following: {userData.TotalFollowing}
                     </Button>
                     <Typography variant="h6" gutterBottom>

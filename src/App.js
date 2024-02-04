@@ -14,6 +14,7 @@ import ProfileSeen from './Profile/ProfileSeen';
 import SearchBar from './SearchBar/SearchBar';
 import Follow from './Following_And_Follow/Follow';
 import Following from './Following_And_Follow/Following';
+import ChatBox from './Chat/ChatBox';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
       <Route path='/searchbar' element={<SearchBar/>}/>
       <Route path='/follow/:userId' element={<Follow/>}/>
       <Route path='/following/:userId' element={<Following/>}/>
+      <Route path='/chatbox' element={<ChatBox/>}/>
     </Routes>
     </BrowserRouter>
   );

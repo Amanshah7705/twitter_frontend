@@ -45,8 +45,14 @@ export default function UpdateTweet() {
     );
     navigate('/tweet/show');
   }
-
+  function backer(){
+    navigate('/')
+   }
   return (
+    <div>
+      <div>
+      <button onClick={backer} >Back</button>
+      </div>
     <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
       <div className="mb-4">
         <input
@@ -68,6 +74,7 @@ export default function UpdateTweet() {
           Update
         </button>
       </div>
+    </div>
     </div>
   );
 }

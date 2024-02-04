@@ -83,7 +83,14 @@ export default function ShowTweet() {
    async function changer(id){
           setLikedUser((prev)=>({...prev,[id]:!LikedUser[id]}))
    }
+   function backer(){
+    navigate('/')
+   }
    return (
+    <div>
+      <div>
+      <button onClick={backer} >Back</button>
+      </div>
     <div className="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
       <div className="text-2xl font-bold mb-4">My Tweets</div>
       {myTweets.length ? (
@@ -140,6 +147,7 @@ export default function ShowTweet() {
       ) : (
         <p className="text-gray-500">No tweets to display.</p>
       )}
+    </div>
     </div>
   );
   

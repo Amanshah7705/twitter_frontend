@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import './AddTweet.css'
 export default function AddTweet() {
   const api = process.env.REACT_APP_BACKEND_URL;
   const accessToken = Cookies.get('accessToken');
@@ -31,13 +32,18 @@ export default function AddTweet() {
       }
     }
   }
-
+   function backer(){
+    navigate('/')
+   }
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
+    <div className="container mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
+      <button className="mb-4" onClick={backer}>
+        Back
+      </button>
       <div className="text-2xl font-bold mb-4">Add Tweet</div>
       <div className="mb-4">
         <textarea
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 border rounded-md textarea"
           placeholder="Enter your tweet"
           onChange={(e) => setTweetAbout(e.target.value)}
         ></textarea>
@@ -53,5 +59,6 @@ export default function AddTweet() {
         </button>
       </div>
     </div>
-  );
+
+    );
 }

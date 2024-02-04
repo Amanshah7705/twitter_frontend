@@ -4,6 +4,7 @@ import { selectuserid } from '../redux/useridslice';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './DeleteTweet.css';
 
 export default function DeleteTweet() {
   const id = useSelector(selectuserid);
@@ -27,7 +28,7 @@ export default function DeleteTweet() {
   }
 
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
+    <div className="container mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
       <h2 className="text-2xl font-bold mb-4">Are You Sure You Want to Delete This?</h2>
       <button
         className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700"
@@ -37,5 +38,6 @@ export default function DeleteTweet() {
         Delete
       </button>
     </div>
+
   );
 }
