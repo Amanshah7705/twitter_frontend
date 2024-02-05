@@ -89,7 +89,9 @@ export default function ChatBox() {
 
   useEffect(() => {
     if (socket !== null) {
+    
       socket.on("send-data-to-client", async (data) => {
+      
         setAllOtherDetails(data);
       });
     }
@@ -142,6 +144,9 @@ export default function ChatBox() {
       <HStack>
         <Button colorScheme="blue" onClick={handleBack}>
           Back
+        </Button>
+        <Button onClick={()=>navigate('/group')} >
+          Go TO Groups
         </Button>
         <Input
           placeholder="Search users..."

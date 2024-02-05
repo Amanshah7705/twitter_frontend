@@ -15,6 +15,7 @@ import SearchBar from "./SearchBar/SearchBar";
 import Follow from "./Following_And_Follow/Follow";
 import Following from "./Following_And_Follow/Following";
 import ChatBox from "./Chat/ChatBox";
+import Group from "./Chat/Group";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/follow/:userId" element={<Follow />} />
         <Route path="/following/:userId" element={<Following />} />
         <Route path="/chatbox" element={<ChatBox />} />
+        <Route path='/group' element={<Group/>} />
       </Routes>
     </BrowserRouter>
   );

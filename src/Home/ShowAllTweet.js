@@ -27,7 +27,8 @@ export default function ShowAllTweet() {
   const [showc, setshowc] = useState(false);
   const [allusername, SetAllUsername] = useState();
   // eslint-disable-next-line
-  const [AllCommentDeatils, SetAllCommentDeatils] = useState();
+  const [idr,setidr]=useState(null)
+  const [AllCommentDeatils, SetAllCommentDeatils] = useState(null);
   async function fetchTweetDetails() {
     try {
       const response = await axios.post(
@@ -45,7 +46,7 @@ export default function ShowAllTweet() {
         return acc;
       }, {});
       setLikedUser(initialLikedUserStatus);
-
+      // console.log(response.data.data)
       setMyTweets(response.data.data);
     } catch (error) {
       console.error("Error fetching tweets:", error);
@@ -163,6 +164,8 @@ export default function ShowAllTweet() {
         },
       }
     );
+    // console.log(responce.data.data)
+    setidr(id)
     SetAllCommentDeatils(responce.data.data);
   }
   async function mdr(id) {
@@ -193,65 +196,68 @@ export default function ShowAllTweet() {
       [id1]: !CheckForAddComment[id1],
     }));
   }
-  const ShowCommentComponent = (props) => {
-    const data = props.datafor;
-    const mainid = props.idfor;
-    return (
-      <div className="p-4">
-        {data &&
-          data.map((comment) => (
-            <div key={comment._id} className="mb-4">
-              <div className="font-bold">{allusername[comment._id]}</div>
-              <div className="mb-2">{comment.textcomment}</div>
-              <div>
-                <Button
-                  onClick={() =>
-                    SetCheckForAddComment((prev) => ({
-                      ...prev,
-                      [comment._id]: !CheckForAddComment[comment._id],
-                    }))
-                  }
-                >
-                  Add comment to replay
-                </Button>
-                {CheckForAddComment[comment._id] === true && (
-                  <div className="mt-2">
-                    <Input
-                      type="text"
-                      placeholder="add replay"
-                      onChange={(e) => SetTextForSend(e.target.value)}
-                    />
-                    <Button
-                      type="submit"
-                      colorScheme="teal"
-                      mt="2"
-                      onClick={() => addundercomment(comment._id, mainid)}
-                    >
-                      add comment to replay
-                    </Button>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-4">
-                <Button onClick={() => mdr(comment._id)}>
-                  {CheckForshowComment[comment._id] === true
-                    ? "Hide Comment"
-                    : "Show Comment"}
-                </Button>
-                {CheckForshowComment[comment._id] === true && comment.reply && (
-                  <ShowCommentComponent
-                    datafor={comment.reply}
-                    idfor={mainid}
-                  />
-                )}
-              </div>
-            </div>
-          ))}
-      </div>
-    );
-  };
-
+  async function ShowCommentComponent(datafor, idfor) {
+    const data = datafor;
+    const mainid = idfor;
+  
+    if (!data || !data.length) {
+      return <div>None</div>;
+    }
+    console.log(data)
+    // const comments = await
+    //   data.map(async (comment) => {
+    //        <div>{comment._id}</div>
+    //       const mc =  await comment?.map(async(morecomments)=>{
+    //          <div key={morecomments?._id} className="mb-4">
+    //          <div className="font-bold">{allusername[morecomments._id]}</div>
+    //          <div className="mb-2">{morecomments.textcomment}</div>
+    //          <div>
+    //            <Button
+    //              onClick={() =>
+    //                SetCheckForAddComment((prev) => ({
+    //                  ...prev,
+    //                  [morecomments._id]: !CheckForAddComment[morecomments._id],
+    //                }))
+    //              }
+    //            >
+    //              Add comment to replay
+    //            </Button>
+    //            {CheckForAddComment[morecomments._id] === true && (
+    //              <div className="mt-2">
+    //                <Input
+    //                  type="text"
+    //                  placeholder="add replay"
+    //                  onChange={(e) => SetTextForSend(e.target.value)}
+    //                />
+    //                <Button
+    //                  type="submit"
+    //                  colorScheme="teal"
+    //                  mt="2"
+    //                  onClick={() => addundercomment(morecomments._id, mainid)}
+    //                >
+    //                  add comment to replay
+    //                </Button>
+    //              </div>
+    //            )}
+    //          </div>
+   
+    //          <div className="mt-4">
+    //            <Button onClick={() => mdr(morecomments._id)}>
+    //              {CheckForshowComment[morecomments._id] === true
+    //                ? "Hide Comment"
+    //                : "Show Comment"}
+    //            </Button>
+    //            {CheckForshowComment[morecomments._id] === true &&
+    //              morecomments.reply &&
+    //              (await ShowCommentComponent(morecomments.reply, mainid))}
+    //          </div>
+    //        </div>
+          
+    //       })
+    //    return <div className="p-4">{mc}</div>;  
+    //   })
+    return null;
+  }
   return (
     <div className="container mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
       <Button onClick={() => backer()}>Back</Button>
@@ -337,10 +343,9 @@ export default function ShowAllTweet() {
                 </Button>
                 <Collapse in={showc}>
                   <Box mt={2}>
-                    <ShowCommentComponent
-                      datafor={AllCommentDeatils}
-                      idfor={tweet._id}
-                    />
+                    {
+                      AllCommentDeatils && AllCommentDeatils.length>0 && ShowCommentComponent(AllCommentDeatils,tweet._id)
+                    }
                   </Box>
                 </Collapse>
                 {tweet.ControlByme && (
