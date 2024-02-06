@@ -47,7 +47,6 @@ export default function ShowAllTweet() {
         return acc;
       }, {});
       setLikedUser(initialLikedUserStatus);
-      // console.log(response.data.data)
       setMyTweets(response.data.data);
     } catch (error) {
       console.error("Error fetching tweets:", error);
@@ -165,7 +164,6 @@ export default function ShowAllTweet() {
         },
       }
     );
-    // console.log(responce.data.data)
     setidr(id)
     SetAllCommentDeatils(responce.data.data);
   }
@@ -204,7 +202,6 @@ export default function ShowAllTweet() {
     if (!data || !data.length) {
       return <div>None</div>;
     }
-    console.log(data)
     const comments = await
       data.map(async (comment) => {
            <div>{comment._id}</div>
