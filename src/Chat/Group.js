@@ -1,38 +1,28 @@
-import React from 'react'
-import { useState,useEffect } from 'react';
+import React from 'react';
+import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { io } from 'socket.io-client';
-import { Input, Button, VStack, HStack, Image } from "@chakra-ui/react";
-import { Portal } from "@radix-ui/react-portal";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverHeader,
-  PopoverBody,
-} from "@chakra-ui/react";
+import { Input, Button, VStack, HStack } from "@chakra-ui/react";
 export default function Group() {
-  const [count, setcount] = useState(0);
+  const [count, setCount] = useState(0);
   const api = process.env.REACT_APP_BACKEND_URL;
-  const api1 = process.env.REACT_APP_SERVER_URL;
+  const api1 = process.env.REACT_APP_SERVER2_URL;
   const accessToken = Cookies.get("accessToken");
   const [socket, setSocket] = useState(null);
   const navigate = useNavigate();
-  const [AllOtherDetails, setAllOtherDetails] = useState();
+  const [allOtherDetails, setAllOtherDetails] = useState();
   const [searchResults, setSearchResults] = useState([]);
-  const [StartData, setStartData] = useState([]);
-  const [firstuser, setFirstuser] = useState(null);
-  const [seconduser, setSeconduser] = useState(null);
-  const [Message, SendMessage] = useState();
-  const [allid, setallid] = useState();
-  const [ForCreateNewGroup,SetForCreateNewGroup] = useState()
-  const [ForJoinAGroup,SetForJoinAgroup] = useState()
-  const [ButtonChecker,SetButtonChecker] = useState()
-  async function ForMyId() {
+  const [startData, setStartData] = useState([]);
+  const [firstUser, setFirstUser] = useState(null);
+  const [secondUser, setSecondUser] = useState(null);
+  const [message, setMessage] = useState('');
+  const [allId, setAllId] = useState();
+  const [forCreateNewGroup, setForCreateNewGroup] = useState('');
+  const [buttonChecker, setButtonChecker] = useState(false);
+
+  async function forMyId() {
     try {
       const data = await axios.post(
         `${api}/users/forid`,
@@ -44,12 +34,13 @@ export default function Group() {
           },
         }
       );
-      setFirstuser(data.data.data.userId);
+      setFirstUser(data.data.data.userId);
     } catch (error) {
       console.error("Error fetching user ID:", error);
     }
   }
-  async function ForAllid() {
+
+  async function forAllId() {
     const data = await axios.post(
       `${api}/users/allid`,
       {},
@@ -60,131 +51,148 @@ export default function Group() {
         },
       }
     );
-    setallid(data.data.data);
+    setAllId(data.data.data);
   }
+
   async function goToUser(id) {
-    setSeconduser(id);
+    setSecondUser(id);
     const newData = {
-      firstuser: firstuser,
+      firstUser: firstUser,
       groupname: id,
     };
     socket.emit("group-from-client", newData);
-    socket.on('group-data',async(newData)=>{
-         setAllOtherDetails(newData)
-    })
-    SendMessage("");
+    setMessage("");
+    setCount(count + 1);
   }
-  useEffect(()=>{
-       if(socket !== null && firstuser  && seconduser){
-        socket.on('group-data',async(newData)=>{
-            setAllOtherDetails(newData)
-       })
-       }
-  },[socket])
-  useEffect(()=>{
+
+  useEffect(() => {
+    if (socket !== null && firstUser && secondUser !== null) {
+      socket.on('group-data', async (newData) => {
+        setAllOtherDetails(newData);
+      });
+    }
+    if (socket !== null) {
+      socket.emit('first', {});
+      socket.on('second-time', (data) => {
+        setSearchResults(data);
+        setStartData(data);
+      });
+    }
+    // eslint-disable-next-line
+  }, [socket, count]);
+
+  useEffect(() => {
     const s = io(`${api1}`);
     setSocket(s);
-    ForMyId();
-    ForAllid();
-    s.emit('first-time',{})
-    s.on('second-time',(data)=>{
-        console.log(data)
-       setSearchResults(data)
-       setStartData(data)
-        
-    })
-  },[])
-  async function HandleCreateGroup(){
-       SetButtonChecker((prev)=>(!prev))
-       const newData ={
-        user:firstuser,
-        groupname:SetForCreateNewGroup
-       }
+    forMyId();
+    forAllId();
+    // eslint-disable-next-line
+  }, []);
 
-       socket.emit('create-new-group',newData)
-       socket.on('second-time',(data)=>{
-        setSearchResults(data)
-        setStartData(data)
-         
-       })
+  async function handleCreateGroup() {
+    setButtonChecker(prev => !prev);
+    const newData = {
+      user: firstUser,
+      groupname: forCreateNewGroup
+    };
+    socket.emit('create-new-group', newData);
+    setForCreateNewGroup('');
   }
+
   function handleInputChange(event) {
     const inputValue = event.target.value;
     setSearchResults(
-      StartData.filter((user) => user.username.startsWith(inputValue))
+      startData.filter((user) => user.groupname.startsWith(inputValue))
     );
   }
-  async function send_message(e) {
+
+  async function sendMessage(e) {
     e.preventDefault();
     const newData = {
-         user:firstuser,
-        groupname:seconduser,
-      textabout: Message,
+      user: firstUser,
+      groupname: secondUser,
+      textabout: message,
     };
-
     socket.emit("send-data-server-group", newData);
+    setMessage('');
   }
 
   return (
-    <div>
-        <div>
-       <Button onClick={()=>navigate('/')} >
-        Back
-       </Button>
-       <Button onClick={()=>navigate('/chatbox')}>
-        Go to chat users
-       </Button>
-       </div>
-       <div>
-        <Button onClick={()=>SetButtonChecker((prev)=>(!prev))} >Create New Group</Button>
-        {
-            ButtonChecker && <div>
-                <input type='text' onChange={(e)=>SetForCreateNewGroup(e.target.value)} ></input>
-                <Button onClick={HandleCreateGroup}>
-                     Submit
-                </Button>
-                 </div>
+    <div className="container mx-auto px-4">
+      <div className="flex justify-between mb-4">
+        <Button onClick={() => navigate('/')} colorScheme="teal">
+          Back
+        </Button>
+        <Button onClick={() => navigate('/chatbox')} colorScheme="teal">
+          Go to chat users
+        </Button>
+      </div>
+      <div className="mb-4">
+        <Button onClick={() => setButtonChecker(prev => !prev)} colorScheme="teal">Create New Group</Button>
+        {buttonChecker && 
+          <div>
+            <input type='text' onChange={(e) => setForCreateNewGroup(e.target.value)} className="border border-gray-300 rounded px-2 py-1 mr-2" />
+            <Button onClick={handleCreateGroup} colorScheme="teal">Submit</Button>
+          </div>
         }
         <Input
           placeholder="Search groups..."
           onChange={handleInputChange}
           maxWidth="300px"
+          className="mt-4"
         />
         <VStack spacing={4} align="flex-start" w="100%">
-        {searchResults.map((user) => (
-          <HStack
-            key={user._id}
-            bg="white"
-            p={4}
-            rounded="md"
-            shadow="md"
-            w="100%"
-          >
-            <Button
-              onClick={() => goToUser(user.groupname)}
-              colorScheme="teal"
-              variant="link"
+          {searchResults.map((user) => (
+            <HStack
+              key={user._id}
+              bg="white"
+              p={4}
+              rounded="md"
+              shadow="md"
+              w="100%"
             >
-              Groupname: {user.groupname}
-            </Button>
-          </HStack>
-        ))}
-      </VStack>
-      {seconduser !== null && (
-        <VStack align="flex-start" w="100%" mt={4}>
-          <Input
-            type="text"
-            value={Message}
-            onChange={(e) => SendMessage(e.target.value)}
-            placeholder="Enter message"
-            w="70%"
-          />
-          <Button type="submit" colorScheme="teal" onClick={send_message}>
-            Send Message
-          </Button>
+              <Button
+                onClick={() => goToUser(user.groupname)}
+                colorScheme="teal"
+                variant="link"
+              >
+                Groupname: {user.groupname}
+              </Button>
+            </HStack>
+          ))}
         </VStack>
-      )}
-       </div>
+        {secondUser !== null && (
+          <VStack align="flex-start" w="100%" mt={4}>
+            <Input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Enter message"
+              w="70%"
+              className="border border-gray-300 rounded px-2 py-1 mr-2"
+            />
+            <Button type="submit" colorScheme="teal" onClick={sendMessage}>
+              Send Message
+            </Button>
+          </VStack>
+        )}
+      </div>
+      <div>
+        {allOtherDetails && secondUser !== null && 
+          <div>
+            {allOtherDetails.map((users, index) => (
+              <div key={index}>
+                {users.AllChat.map((text, idx) => (
+                  <div key={idx}>
+                    <div>{allId[text.textfrom]}</div>
+                    <div>{text.textabout}</div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        }
+      </div>
     </div>
-  )
+  );
 }

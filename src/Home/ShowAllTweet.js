@@ -204,58 +204,58 @@ export default function ShowAllTweet() {
       return <div>None</div>;
     }
     console.log(data)
-    // const comments = await
-    //   data.map(async (comment) => {
-    //        <div>{comment._id}</div>
-    //       const mc =  await comment?.map(async(morecomments)=>{
-    //          <div key={morecomments?._id} className="mb-4">
-    //          <div className="font-bold">{allusername[morecomments._id]}</div>
-    //          <div className="mb-2">{morecomments.textcomment}</div>
-    //          <div>
-    //            <Button
-    //              onClick={() =>
-    //                SetCheckForAddComment((prev) => ({
-    //                  ...prev,
-    //                  [morecomments._id]: !CheckForAddComment[morecomments._id],
-    //                }))
-    //              }
-    //            >
-    //              Add comment to replay
-    //            </Button>
-    //            {CheckForAddComment[morecomments._id] === true && (
-    //              <div className="mt-2">
-    //                <Input
-    //                  type="text"
-    //                  placeholder="add replay"
-    //                  onChange={(e) => SetTextForSend(e.target.value)}
-    //                />
-    //                <Button
-    //                  type="submit"
-    //                  colorScheme="teal"
-    //                  mt="2"
-    //                  onClick={() => addundercomment(morecomments._id, mainid)}
-    //                >
-    //                  add comment to replay
-    //                </Button>
-    //              </div>
-    //            )}
-    //          </div>
+    const comments = await
+      data.map(async (comment) => {
+           <div>{comment._id}</div>
+          const mc =  await comment?.map(async(morecomments)=>{
+             <div key={morecomments?._id} className="mb-4">
+             <div className="font-bold">{allusername[morecomments._id]}</div>
+             <div className="mb-2">{morecomments.textcomment}</div>
+             <div>
+               <Button
+                 onClick={() =>
+                   SetCheckForAddComment((prev) => ({
+                     ...prev,
+                     [morecomments._id]: !CheckForAddComment[morecomments._id],
+                   }))
+                 }
+               >
+                 Add comment to replay
+               </Button>
+               {CheckForAddComment[morecomments._id] === true && (
+                 <div className="mt-2">
+                   <Input
+                     type="text"
+                     placeholder="add replay"
+                     onChange={(e) => SetTextForSend(e.target.value)}
+                   />
+                   <Button
+                     type="submit"
+                     colorScheme="teal"
+                     mt="2"
+                     onClick={() => addundercomment(morecomments._id, mainid)}
+                   >
+                     add comment to replay
+                   </Button>
+                 </div>
+               )}
+             </div>
    
-    //          <div className="mt-4">
-    //            <Button onClick={() => mdr(morecomments._id)}>
-    //              {CheckForshowComment[morecomments._id] === true
-    //                ? "Hide Comment"
-    //                : "Show Comment"}
-    //            </Button>
-    //            {CheckForshowComment[morecomments._id] === true &&
-    //              morecomments.reply &&
-    //              (await ShowCommentComponent(morecomments.reply, mainid))}
-    //          </div>
-    //        </div>
-          
-    //       })
-    //    return <div className="p-4">{mc}</div>;  
-    //   })
+             <div className="mt-4">
+               <Button onClick={() => mdr(morecomments._id)}>
+                 {CheckForshowComment[morecomments._id] === true
+                   ? "Hide Comment"
+                   : "Show Comment"}
+               </Button>
+               {CheckForshowComment[morecomments._id] === true &&
+                 morecomments.reply &&
+                 (await ShowCommentComponent(morecomments.reply, mainid))}
+             </div>
+           </div>
+           return <div>{comments}</div>
+          })
+       return <div className="p-4">{mc}</div>;  
+      })
     return null;
   }
   return (
