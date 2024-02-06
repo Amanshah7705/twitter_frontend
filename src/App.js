@@ -16,6 +16,7 @@ import Following from "./Following_And_Follow/Following";
 import ChatBox from "./Chat/ChatBox";
 import Group from "./Chat/Group";
 import Home from "./Home2/Home";
+import VideoCall from "./video/video";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/chatbox" element={<ChatBox />} />
         <Route path='/group' element={<Group/>} />
         <Route path='/' element ={<Home/>}/>
+        <Route path='/videocall' element={<VideoCall/>}/>
       </Routes>
     </BrowserRouter>
   );

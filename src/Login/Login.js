@@ -43,7 +43,6 @@ export default function Login() {
     try {
       validateUser();
       validatePassword();
-       console.log(username,password)
       if (!userError && !passwordError) {
         const data = {
           username: username,
@@ -51,7 +50,6 @@ export default function Login() {
         };
 
         const responce = await axios.post(`${api}/users/login`, data);
-        console.log(responce)
         const { accessToken, refreshToken } = responce.data.data;
 
         document.cookie = `accessToken=${accessToken}; path=/;`;

@@ -46,6 +46,9 @@ function Navbar() {
  function homeuser(){
    navigate('/')
  }
+ function videouser(){
+    navigate('/videocall')
+ }
   return (
     <div>
     <nav className="bg-gray-800">
@@ -81,6 +84,9 @@ function Navbar() {
                 </button>
                 <button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" onClick={homeuser}>
                   Home
+                </button>
+                <button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" onClick={videouser}>
+                  VideoCall
                 </button>
               </div>
             </div>
