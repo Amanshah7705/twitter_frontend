@@ -17,6 +17,7 @@ import { Image } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { setFollowid } from "../redux/listSlice.js";
 import { setFollowingid } from "../redux/listSlice.js";
+import Navbar from "../Home/Home.js";
 
 // Create a theme using createTheme
 const theme = createTheme({
@@ -111,6 +112,8 @@ export default function ProfileSeen() {
   }
 
   return (
+    <div>
+      <Navbar/>
     <ThemeProvider theme={theme}>
       <Container maxWidth="md" className="mt-4">
         <Button className="mb-4" onClick={handleBack}>
@@ -185,5 +188,6 @@ export default function ProfileSeen() {
         )}
       </Container>
     </ThemeProvider>
+    </div>
   );
 }

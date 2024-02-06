@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import "./AddTweet.css";
+import Navbar from "./Home";
 export default function AddTweet() {
   const api = process.env.REACT_APP_BACKEND_URL;
   const accessToken = Cookies.get("accessToken");
@@ -36,6 +37,8 @@ export default function AddTweet() {
     navigate("/");
   }
   return (
+    <div>
+      <Navbar/>
     <div className="container mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
       <button className="mb-4" onClick={backer}>
         Back
@@ -61,5 +64,7 @@ export default function AddTweet() {
         </button>
       </div>
     </div>
+    </div>
+
   );
 }

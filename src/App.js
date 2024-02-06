@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./Home/Home";
 import Signup from "./Signup/SignUp";
 import Login from "./Login/Login";
 import ForgotPasswordPage from "./Forgot/ForgotPage";
@@ -16,12 +15,12 @@ import Follow from "./Following_And_Follow/Follow";
 import Following from "./Following_And_Follow/Following";
 import ChatBox from "./Chat/ChatBox";
 import Group from "./Chat/Group";
+import Home from "./Home2/Home";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/ForgotPassword" element={<ForgotPasswordPage />} />
@@ -38,6 +37,7 @@ function App() {
         <Route path="/following/:userId" element={<Following />} />
         <Route path="/chatbox" element={<ChatBox />} />
         <Route path='/group' element={<Group/>} />
+        <Route path='/' element ={<Home/>}/>
       </Routes>
     </BrowserRouter>
   );

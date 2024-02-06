@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import { Input, Button, VStack, HStack } from "@chakra-ui/react";
+import Navbar from '../Home/Home';
 export default function Group() {
   const [count, setCount] = useState(0);
   const api = process.env.REACT_APP_BACKEND_URL;
@@ -118,7 +119,10 @@ export default function Group() {
   }
 
   return (
+    <div>
+       <Navbar/>
     <div className="container mx-auto px-4">
+     
       <div className="flex justify-between mb-4">
         <Button onClick={() => navigate('/')} colorScheme="teal">
           Back
@@ -193,6 +197,7 @@ export default function Group() {
           </div>
         }
       </div>
+    </div>
     </div>
   );
 }

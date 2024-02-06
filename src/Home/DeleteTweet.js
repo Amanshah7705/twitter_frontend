@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./DeleteTweet.css";
+import Navbar from "./Home";
 
 export default function DeleteTweet() {
   const id = useSelector(selectuserid);
@@ -28,6 +29,8 @@ export default function DeleteTweet() {
   }
 
   return (
+    <div>
+      <Navbar/>
     <div className="container mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
       <h2 className="text-2xl font-bold mb-4">
         Are You Sure You Want to Delete This?
@@ -40,5 +43,7 @@ export default function DeleteTweet() {
         Delete
       </button>
     </div>
+    </div>
+
   );
 }

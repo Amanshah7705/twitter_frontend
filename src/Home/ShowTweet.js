@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setuserid } from "../redux/useridslice.js";
+import Navbar from "./Home.js";
 
 export default function ShowTweet() {
   const api = process.env.REACT_APP_BACKEND_URL;
@@ -100,6 +101,7 @@ export default function ShowTweet() {
   }
   return (
     <div>
+      <Navbar/>
       <div>
         <button onClick={backer}>Back</button>
       </div>

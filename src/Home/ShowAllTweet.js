@@ -13,6 +13,7 @@ import {
   Box,
   Collapse,
 } from "@chakra-ui/react";
+import Navbar from "./Home.js";
 
 export default function ShowAllTweet() {
   const api = process.env.REACT_APP_BACKEND_URL;
@@ -259,6 +260,9 @@ export default function ShowAllTweet() {
     return null;
   }
   return (
+    <div>
+      <Navbar/>
+   
     <div className="container mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
       <Button onClick={() => backer()}>Back</Button>
       <div className="text-2xl font-bold mb-4">All Tweets</div>
@@ -371,6 +375,7 @@ export default function ShowAllTweet() {
       ) : (
         <p className="text-gray-500">No tweets to display.</p>
       )}
+    </div>
     </div>
   );
 }

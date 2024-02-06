@@ -5,6 +5,7 @@ import { selectFollowlist } from "../redux/listSlice.js";
 import axios from "axios";
 import Cookies from "js-cookie";
 import "./Follow.css";
+import Navbar from "../Home/Home.js";
 
 export default function Follow() {
   const api = process.env.REACT_APP_BACKEND_URL;
@@ -45,6 +46,9 @@ export default function Follow() {
     navigate("/");
   }
   return (
+    <div>
+    <Navbar/>
+
     <div className="follow-container mx-auto my-8">
       <div>
         <button onClick={backer}>Back</button>
@@ -66,5 +70,7 @@ export default function Follow() {
         ))}
       </div>
     </div>
+    </div>
+
   );
 }

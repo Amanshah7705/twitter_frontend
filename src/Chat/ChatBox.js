@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Input, Button, VStack, HStack, Image } from "@chakra-ui/react";
+import { Input, Button, VStack, HStack, Image, Text } from "@chakra-ui/react";
 import { Portal } from "@radix-ui/react-portal";
 import {
   Popover,
@@ -14,6 +14,7 @@ import {
   PopoverHeader,
   PopoverBody,
 } from "@chakra-ui/react";
+import Navbar from "../Home/Home";
 
 export default function ChatBox() {
   const [count, setcount] = useState(0);
@@ -22,13 +23,14 @@ export default function ChatBox() {
   const accessToken = Cookies.get("accessToken");
   const [socket, setSocket] = useState(null);
   const navigate = useNavigate();
-  const [AllOtherDetails, setAllOtherDetails] = useState();
+  const [AllOtherDetails, setAllOtherDetails] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [StartData, setStartData] = useState([]);
   const [firstuser, setFirstuser] = useState(null);
   const [seconduser, setSeconduser] = useState(null);
-  const [Message, SendMessage] = useState();
-  const [allid, setallid] = useState();
+  const [Message, SendMessage] = useState("");
+  const [allid, setallid] = useState({});
+
   async function fetchSearchResults() {
     try {
       const response = await axios.post(
@@ -65,6 +67,7 @@ export default function ChatBox() {
       console.error("Error fetching user ID:", error);
     }
   }
+
   async function ForAllid() {
     const data = await axios.post(
       `${api}/users/allid`,
@@ -78,6 +81,7 @@ export default function ChatBox() {
     );
     setallid(data.data.data);
   }
+
   useEffect(() => {
     const s = io(`${api1}`);
     setSocket(s);
@@ -89,18 +93,16 @@ export default function ChatBox() {
 
   useEffect(() => {
     if (socket !== null) {
-    
       socket.on("send-data-to-client", async (data) => {
-      
         setAllOtherDetails(data);
       });
     }
-    // eslint-disable-next-line
-  }, [count]);
+  }, [count, socket]);
 
   function handleBack() {
     navigate("/");
   }
+
   async function send_message(e) {
     e.preventDefault();
     const newData = {
@@ -112,14 +114,6 @@ export default function ChatBox() {
     socket.emit("send-data-server", newData);
     setcount(count + 1);
   }
-  useEffect(() => {
-    SendMessage("");
-    if (socket !== null) {
-      socket.on("send-data-to-client", async (data) => {
-        setAllOtherDetails(data);
-      });
-    }
-  }, [count, socket]);
 
   async function goToUser(id) {
     setSeconduser(id);
@@ -140,13 +134,15 @@ export default function ChatBox() {
   }
 
   return (
-    <VStack spacing={4} align="center" mt={8}>
-      <HStack>
+    <div>
+      <Navbar/>
+    <VStack spacing={4} align="center" mt={8} w="100%">
+      <HStack w="100%" justify="space-between">
         <Button colorScheme="blue" onClick={handleBack}>
           Back
         </Button>
-        <Button onClick={()=>navigate('/group')} >
-          Go TO Groups
+        <Button onClick={() => navigate('/group')} >
+          Go To Groups
         </Button>
         <Input
           placeholder="Search users..."
@@ -163,6 +159,7 @@ export default function ChatBox() {
             rounded="md"
             shadow="md"
             w="100%"
+            alignItems="center"
           >
             <Image
               src={user.userextraField[0]?.profile_picture}
@@ -195,9 +192,9 @@ export default function ChatBox() {
         </VStack>
       )}
       {seconduser !== null && AllOtherDetails && (
-        <VStack mt={4} spacing={2} align="flex-start">
-          <div>{allid[AllOtherDetails[0]?.user1]}</div>
-          <div>{allid[AllOtherDetails[0]?.user2]}</div>
+        <VStack mt={4} spacing={2} align="flex-start" w="100%">
+          <Text>{allid[AllOtherDetails[0]?.user1]}</Text>
+          <Text>{allid[AllOtherDetails[0]?.user2]}</Text>
         </VStack>
       )}
       <VStack mt={4} align="flex-start" w="100%">
@@ -232,5 +229,6 @@ export default function ChatBox() {
           ))}
       </VStack>
     </VStack>
+    </div>
   );
 }

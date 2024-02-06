@@ -4,6 +4,7 @@ import { selectuserid } from "../redux/useridslice";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Navbar from "./Home";
 
 export default function UpdateTweet() {
   const id = useSelector(selectuserid);
@@ -50,6 +51,7 @@ export default function UpdateTweet() {
   }
   return (
     <div>
+      <Navbar/>
       <div>
         <button onClick={backer}>Back</button>
       </div>

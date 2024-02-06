@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Input, Button, VStack, HStack, Image } from "@chakra-ui/react";
+import Navbar from "../Home/Home";
 
 export default function SearchBar() {
   const api = process.env.REACT_APP_BACKEND_URL;
@@ -53,6 +54,8 @@ export default function SearchBar() {
   }
 
   return (
+    <div>
+      <Navbar/>
     <VStack spacing={4}>
       <HStack>
         <Button onClick={handleBack}>Back</Button>
@@ -73,5 +76,7 @@ export default function SearchBar() {
         ))}
       </VStack>
     </VStack>
+    </div>
+
   );
 }
