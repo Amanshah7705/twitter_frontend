@@ -63,7 +63,7 @@ export default function ChatBox() {
       );
       setFirstuser(data.data.data.userId);
     } catch (error) {
-      console.error("Error fetching user ID:", error);
+      navigate('/Login')
     }
   }
 

@@ -20,9 +20,11 @@ function Navbar() {
           },
         }
       );
+      // console.log(response)
       setId(response.data.data.userId);
     } catch (error) {
-      console.error("Error fetching user ID:", error);
+      navigate('/Login')
+      // console.error("Error fetching user ID:", error);
     }
   }
 
