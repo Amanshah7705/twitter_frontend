@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Input, Button, Image } from "@chakra-ui/react";
 import Navbar from "../Home/Home";
-import Peer from 'peerjs'
-import { useRef } from "react";
+import Peer from 'peerjs';
+import { Box, Heading, Text } from '@chakra-ui/react';
 
 export default function VideoCall() {
     const [id, setId] = useState(null);
@@ -16,31 +16,42 @@ export default function VideoCall() {
     const [StartData, setStartData] = useState([]);
     const [call, setCall] = useState(null);
     const [incomingCall, setIncomingCall] = useState(false);
+    const [callAnswered, setCallAnswered] = useState(false);
+    // eslint-disable-next-line
     const [remoteStream, setRemoteStream] = useState(null);
 
     const myvideo = useRef(null);
+    const remoteVideo = useRef(null);
     const myid = useRef(null);
     const friendid = useRef(null);
     const peerref = useRef(null);
     const [cc, setCC] = useState(0);
+    let xp = 0;
+
     async function SendToBackend() {
-        console.log(myid.current)
         const newData = {
             myid: id,
             mypeerid: myid.current
         };
-        // eslint-disable-next-line
-        const data = await axios.post(`${api}/peer/add`, newData);
+        try {
+            await axios.post(`${api}/peer/add`, newData);
+        } catch (error) {
+            console.error('Error sending data to backend:', error);
+        }
     }
 
     async function ForFetchUser() {
-        const response = await axios.post(`${api}/users/forid`, {}, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            },
-        });
-        setId(response.data.data.userId);
+        try {
+            const response = await axios.post(`${api}/users/forid`, {}, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            setId(response.data.data.userId);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
     }
 
     async function videopart() {
@@ -54,10 +65,9 @@ export default function VideoCall() {
                 myid.current = id;
                 setCC(cc + 1);
             });
-            peerref.current.on('call', (call) => {
+            peerref.current.on('call', (incomingCall) => {
                 setIncomingCall(true);
-                call.answer(stream);
-                handleCall(call);
+                handleCall(incomingCall);
             });
         } catch (error) {
             console.error('Error accessing user media:', error);
@@ -65,9 +75,20 @@ export default function VideoCall() {
     }
 
     useEffect(() => {
-        fetchSearchResults();
-        ForFetchUser();
-        videopart();
+        if (xp === 1) {
+
+        } else {
+            xp++;
+
+            fetchSearchResults();
+            ForFetchUser();
+            videopart();
+        }
+        return () => {
+            if (peerref.current) {
+                peerref.current.destroy();
+            }
+        };
         // eslint-disable-next-line
     }, []);
 
@@ -80,11 +101,14 @@ export default function VideoCall() {
         // eslint-disable-next-line
     }, [id, cc]);
 
-    const handleCall = (call) => {
-        call.on('stream', (remoteStream) => {
+    const handleCall = (incomingCall) => {
+        incomingCall.on('stream', (remoteStream) => {
             setRemoteStream(remoteStream);
+            if (remoteVideo.current) {
+                remoteVideo.current.srcObject = remoteStream;
+            }
         });
-        setCall(call);
+        setCall(incomingCall);
     };
 
     async function fetchSearchResults() {
@@ -123,17 +147,11 @@ export default function VideoCall() {
                 friendid: idx
             };
             const data = await axios.post(`${api}/peer/get`, newData);
-            console.log(data)
             friendid.current = data.data.data[0].PeerId;
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            const call = peerref.current.call(friendid.current, stream);
-            setCall(call);
-
-            call.on('stream', (remoteStream) => {
-                setRemoteStream(remoteStream);
-            });
-
-            call.on('close', () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            const newCall = peerref.current.call(friendid.current, stream);
+            handleCall(newCall);
+            newCall.on('close', () => {
                 setRemoteStream(null);
                 setIncomingCall(false);
             });
@@ -144,24 +162,40 @@ export default function VideoCall() {
 
     async function answerCall() {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            call.answer(stream);
-             
-            call.on('stream', (remoteStream) => {
-                setRemoteStream(remoteStream);
-            });
-
-            call.on('close', () => {
-                setRemoteStream(null);
-                setIncomingCall(false);
-            });
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            if (call) {
+                setCallAnswered(true); // Set call as answered
+                call.answer(stream);
+                call.on('stream', (remoteStream) => {
+                    setRemoteStream(remoteStream);
+                    if (remoteVideo.current) {
+                        remoteVideo.current.srcObject = remoteStream;
+                    }
+                });
+                call.on('close', () => {
+                    setRemoteStream(null);
+                    setIncomingCall(false);
+                });
+            }
         } catch (error) {
             console.error('Error answering call:', error);
         }
     }
 
+    // Function to toggle video
+    const toggleVideo = () => {
+        const videoTrack = myvideo.current.srcObject.getVideoTracks()[0];
+        videoTrack.enabled = !videoTrack.enabled;
+    };
+
+    // Function to toggle audio
+    const toggleAudio = () => {
+        const audioTrack = myvideo.current.srcObject.getAudioTracks()[0];
+        audioTrack.enabled = !audioTrack.enabled;
+    };
+
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-screen">
             <Navbar />
             <div className="flex justify-between px-4 py-2">
                 <Button onClick={handleBack}>Back</Button>
@@ -177,22 +211,34 @@ export default function VideoCall() {
                         <Button onClick={() => callFriend(user._id)}>Call</Button>
                     </div>
                 ))}
-                {incomingCall && (
+                {incomingCall && !callAnswered && (
                     <div className="flex items-center justify-center p-4">
                         <p>Incoming Call...</p>
                         <Button onClick={answerCall}>Answer</Button>
                     </div>
                 )}
-                {remoteStream && (
-                    <div className="flex items-center justify-center p-4">
-                        <p>Remote Stream</p>
-                        <video autoPlay ref={remoteStream} />
-                    </div>
-                )}
-                <div className="flex items-center justify-center p-4">
-                    <p>Local Stream</p>
-                    <video autoPlay ref={myvideo} />
-                </div>
+                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="100vh">
+                    <Box mb={8} textAlign="center">
+                        <Heading as="h1" size="lg" mb={2}>Video Call App</Heading>
+                        <Text fontSize="md">Enjoy seamless video calling experience</Text>
+                    </Box>
+
+                    <Box display="flex" justifyContent="center" p={4}>
+                        <Box mr={8} textAlign="center">
+                            <Text fontSize="lg" fontWeight="bold" mb={2}>Remote Stream</Text>
+                            <video autoPlay ref={remoteVideo} className="rounded-lg shadow-md" style={{ maxWidth: "100%" }} />
+                        </Box>
+
+                        <Box textAlign="center">
+                            <Text fontSize="lg" fontWeight="bold" mb={2}>Local Stream</Text>
+                            <video autoPlay ref={myvideo} className="rounded-lg shadow-md" style={{ maxWidth: "100%" }} />
+                        </Box>
+                    </Box>
+                    <Box display="flex" justifyContent="center" mt={4}>
+                        <Button onClick={toggleVideo} mr={4}>Toggle Video</Button>
+                        <Button onClick={toggleAudio}>Toggle Audio</Button>
+                    </Box>
+                </Box>
             </div>
         </div>
     );
