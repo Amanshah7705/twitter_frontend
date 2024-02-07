@@ -51,7 +51,6 @@ export default function Login() {
 
         const responce = await axios.post(`${api}/users/login`, data);
         const { accessToken, refreshToken } = responce.data.data;
-
         document.cookie = `accessToken=${accessToken}; path=/;`;
         document.cookie = `refreshToken=${refreshToken}; path=/;`;
 

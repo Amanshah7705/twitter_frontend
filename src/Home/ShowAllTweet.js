@@ -30,11 +30,25 @@ export default function ShowAllTweet() {
   // eslint-disable-next-line
   const [idr,setidr]=useState(null)
   const [AllCommentDeatils, SetAllCommentDeatils] = useState(null);
+  // eslint-disable-next-line
+  const [myid,setmyid] = useState()
   async function fetchTweetDetails() {
     try {
+      const data = await axios.post(
+        `${api}/users/forid`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setmyid(data.data.data.userId);
+      // console.log(data.data.data.userId)
       const response = await axios.post(
         `${api}/tweet/alltweet`,
-        {},
+        {needid:data.data.data.userId},
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -65,6 +79,7 @@ export default function ShowAllTweet() {
     );
     SetAllUsername(data.data.data);
   }
+
   useEffect(() => {
     fetchTweetDetails();
     FetchUsername();

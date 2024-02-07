@@ -9,7 +9,6 @@ import Navbar from '../Home/Home';
 export default function Group() {
   const [count, setCount] = useState(0);
   const api = process.env.REACT_APP_BACKEND_URL;
-  const api1 = process.env.REACT_APP_SERVER2_URL;
   const accessToken = Cookies.get("accessToken");
   const [socket, setSocket] = useState(null);
   const navigate = useNavigate();
@@ -83,7 +82,7 @@ export default function Group() {
   }, [socket, count]);
 
   useEffect(() => {
-    const s = io(`${api1}`);
+    const s = io(`${api}`);
     setSocket(s);
     forMyId();
     forAllId();

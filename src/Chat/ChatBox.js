@@ -19,7 +19,6 @@ import Navbar from "../Home/Home";
 export default function ChatBox() {
   const [count, setcount] = useState(0);
   const api = process.env.REACT_APP_BACKEND_URL;
-  const api1 = process.env.REACT_APP_SERVER_URL;
   const accessToken = Cookies.get("accessToken");
   const [socket, setSocket] = useState(null);
   const navigate = useNavigate();
@@ -83,7 +82,7 @@ export default function ChatBox() {
   }
 
   useEffect(() => {
-    const s = io(`${api1}`);
+    const s = io(`${api}`);
     setSocket(s);
     fetchSearchResults();
     ForMyId();

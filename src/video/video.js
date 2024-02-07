@@ -23,8 +23,8 @@ export default function VideoCall() {
     const friendid = useRef(null);
     const peerref = useRef(null);
     const [cc, setCC] = useState(0);
-
     async function SendToBackend() {
+        console.log(myid.current)
         const newData = {
             myid: id,
             mypeerid: myid.current
@@ -123,8 +123,9 @@ export default function VideoCall() {
                 friendid: idx
             };
             const data = await axios.post(`${api}/peer/get`, newData);
+            console.log(data)
             friendid.current = data.data.data[0].PeerId;
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             const call = peerref.current.call(friendid.current, stream);
             setCall(call);
 
@@ -143,9 +144,9 @@ export default function VideoCall() {
 
     async function answerCall() {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             call.answer(stream);
-
+             
             call.on('stream', (remoteStream) => {
                 setRemoteStream(remoteStream);
             });
@@ -185,7 +186,7 @@ export default function VideoCall() {
                 {remoteStream && (
                     <div className="flex items-center justify-center p-4">
                         <p>Remote Stream</p>
-                        <video autoPlay ref={myvideo} />
+                        <video autoPlay ref={remoteStream} />
                     </div>
                 )}
                 <div className="flex items-center justify-center p-4">
