@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import Navbar from "../Home/Home";
+import { Button, Input, FormControl, FormLabel, FormErrorMessage } from "@chakra-ui/react"; // Import Chakra UI components
+import "tailwindcss/tailwind.css"; // Import Tailwind CSS
 
 export default function Profile() {
   const api = process.env.REACT_APP_BACKEND_URL;
@@ -51,43 +54,47 @@ export default function Profile() {
   }
 
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
-      <div className="text-2xl font-bold mb-4">PROFILE UPDATE PAGE</div>
-      <div className="mb-4">
-        <input
-          className="w-full p-2 border rounded-md"
-          placeholder="Enter Your Bio"
-          type="text"
-          onChange={(e) => setBio(e.target.value)}
-        />
-        {ans && <p className="text-red-500">{BioError}</p>}
-      </div>
-      <div className="mb-4">
-        <input
-          className="w-full p-2 border rounded-md"
-          placeholder="Enter Your Location"
-          type="text"
-          onChange={(e) => setLocation(e.target.value)}
-        />
-        {ans && <p className="text-red-500">{LocationError}</p>}
-      </div>
-      <div className="mb-4">
-        <input
-          className="w-full p-2 border rounded-md"
-          type="file"
-          onChange={(e) => setCoverImage(e.target.files[0])} // Use e.target.files
-        />
-        {ans && <p className="text-red-500">{CoverImageError}</p>}
+    <div>
+      <div>
+      <Navbar />
       </div>
       <div>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-          type="button" // Set type to "button" to prevent form submission
-          onClick={validator}
-        >
-          Submit PROFILE
-        </button>
+      <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
+    
+    <div className="text-2xl font-bold mb-4">PROFILE UPDATE PAGE</div>
+    <FormControl className="mb-4" isInvalid={ans && BioError}>
+      <FormLabel>Bio</FormLabel>
+      <Input
+        placeholder="Enter Your Bio"
+        onChange={(e) => setBio(e.target.value)}
+      />
+      <FormErrorMessage>{ans && BioError}</FormErrorMessage>
+    </FormControl>
+    <FormControl className="mb-4" isInvalid={ans && LocationError}>
+      <FormLabel>Location</FormLabel>
+      <Input
+        placeholder="Enter Your Location"
+        onChange={(e) => setLocation(e.target.value)}
+      />
+      <FormErrorMessage>{ans && LocationError}</FormErrorMessage>
+    </FormControl>
+    <FormControl className="mb-4" isInvalid={ans && CoverImageError}>
+      <FormLabel>Cover Image</FormLabel>
+      <Input
+        type="file"
+        onChange={(e) => setCoverImage(e.target.files[0])}
+      />
+      <FormErrorMessage>{ans && CoverImageError}</FormErrorMessage>
+    </FormControl>
+    <Button
+      className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+      onClick={validator}
+    >
+      Submit PROFILE
+    </Button>
+  </div>
       </div>
     </div>
+
   );
 }

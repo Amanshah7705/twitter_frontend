@@ -51,6 +51,7 @@ export default function ProfileSeen() {
           },
         }
       );
+      console.log(response)
       SetDataForDisplay(response.data.data);
       setLoading(false);
     } catch (error) {

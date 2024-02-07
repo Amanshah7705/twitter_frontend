@@ -45,7 +45,6 @@ export default function ShowAllTweet() {
         }
       );
       setmyid(data.data.data.userId);
-      // console.log(data.data.data.userId)
       const response = await axios.post(
         `${api}/tweet/alltweet`,
         {needid:data.data.data.userId},

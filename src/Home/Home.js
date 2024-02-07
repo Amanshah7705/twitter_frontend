@@ -20,7 +20,6 @@ function Navbar() {
           },
         }
       );
-      // console.log(response)
       setId(response.data.data.userId);
     } catch (error) {
       navigate('/Login')
@@ -59,6 +58,7 @@ function Navbar() {
                 <NavbarLink onClick={navigateTo("/group")}>Group Chat</NavbarLink>
                 <NavbarLink onClick={navigateTo("/")}>Home</NavbarLink>
                 <NavbarLink onClick={navigateTo("/videocall")}>VideoCall</NavbarLink>
+                <NavbarLink onClick={navigateTo("/ProfileUpdate")} >Update Your Profile</NavbarLink>
               </div>
             </div>
           </div>
